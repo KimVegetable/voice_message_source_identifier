@@ -24,11 +24,10 @@ This project is associated with a research paper.
 ## Getting Started
 - Download `ffmpeg.exe` and place it under `tools/ffmpeg/ffmpeg.exe` when running from source.
 - Download `ffprobe.exe` and place it under `tools/ffmpeg/ffprobe.exe` when running from source.
-- Pre-built binaries are available in the repository releases.
 
 
 ## Dataset
-You can download the dataset from the following [Google Drive link](https://drive.google.com/drive/folders/1dBcuxgXVlQmEppyMjYugHUMseZlXcF0S?usp=sharing).
+You can download the dataset and **the Pre-built binary** from the following [Google Drive link](https://drive.google.com/drive/folders/1KXONLxWPNKDan4SpVGG2VjuiLVEcSdmc?usp=drive_link).
 
 
 ## Usage (cli)
