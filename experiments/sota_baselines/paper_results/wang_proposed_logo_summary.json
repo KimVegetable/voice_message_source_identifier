@@ -1,0 +1,12 @@
+﻿{
+    "method":  "wang_proposed",
+    "folds":  8,
+    "accuracy_mean":  0.041232638888888888,
+    "accuracy_std":  0.044327937416532889,
+    "precision_weighted_mean":  0.015740307722116535,
+    "recall_weighted_mean":  0.041232638888888888,
+    "f1_weighted_mean":  0.021023332100577344,
+    "protocol":  "logo",
+    "tune_profile":  "paper",
+    "sample_rate":  32000
+}

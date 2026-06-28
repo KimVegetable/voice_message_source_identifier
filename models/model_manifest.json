@@ -1,0 +1,46 @@
+{
+  "default_model": "trained_lr.pkl",
+  "model_files": [
+    {
+      "file": "trained_lr.pkl",
+      "size_bytes": 39683,
+      "sha256": "792d16468467f44fc327a78e660c857b1987a6d70633c6ac0df5d275cc5e2306",
+      "role": "default LR classifier for the revised manuscript version",
+      "source": "Extracted from trained_voting.pkl named_estimators_['lr'].",
+      "requires": [
+        "scaler.pkl",
+        "used_columns.pkl",
+        "labels.pkl"
+      ]
+    },
+    {
+      "file": "trained_voting.pkl",
+      "size_bytes": 6998951,
+      "sha256": "59bbda2fc020b20b56c475329a2138094d0423a7126cd28caf50c3a2f57f8c5f",
+      "role": "legacy voting ensemble retained for backward compatibility",
+      "requires": [
+        "scaler.pkl",
+        "used_columns.pkl",
+        "labels.pkl"
+      ]
+    }
+  ],
+  "shared_files": [
+    {
+      "file": "scaler.pkl",
+      "size_bytes": 6519,
+      "sha256": "53407e846b0cc5132344379b16afacd453a1f7ec9db7e09c74c8b56f47c5327a"
+    },
+    {
+      "file": "used_columns.pkl",
+      "size_bytes": 8201,
+      "sha256": "3602c99689739506917032f96f20e9f50380c83a4133dd3186e3612b03960697"
+    },
+    {
+      "file": "labels.pkl",
+      "size_bytes": 912,
+      "sha256": "8bd801797739f4e6d47ad47e7fd50fa78d3fc9184fd16a4546f249cf55dbc44c"
+    }
+  ],
+  "export_sklearn_version": "1.7.2"
+}

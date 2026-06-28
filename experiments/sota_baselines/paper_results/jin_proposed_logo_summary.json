@@ -1,0 +1,10 @@
+{
+  "method": "jin_proposed",
+  "folds": 8,
+  "accuracy_mean": 0.8042534722222223,
+  "accuracy_std": 0.04082894220396494,
+  "precision_weighted_mean": 0.813668482423457,
+  "recall_weighted_mean": 0.8042534722222223,
+  "f1_weighted_mean": 0.7967062280255977,
+  "protocol": "logo"
+}

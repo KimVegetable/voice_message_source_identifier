@@ -1,0 +1,4 @@
+﻿condition,n,correct,accuracy
+human_clean,105,89,0.8476190476190476
+human_noise,105,69,0.6571428571428571
+tts_clean,105,69,0.6571428571428571

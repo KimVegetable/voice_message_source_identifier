@@ -1,0 +1,7 @@
+﻿condition,platform,n,correct,accuracy
+human_clean,and,55,47,0.8545454545454545
+human_clean,ios,50,42,0.84
+human_noise,and,55,34,0.6181818181818182
+human_noise,ios,50,35,0.7
+tts_clean,and,55,35,0.6363636363636364
+tts_clean,ios,50,34,0.68

@@ -1,0 +1,13 @@
+Method,Inspired by,Input feature,Model,Protocol,Folds,Accuracy mean,Accuracy std,Weighted F1 mean
+gmm_ubm,Wang et al. 2023 baseline,39 dimensional MFCC sequences,64 component GMM-UBM score,logo,8,0.5789930555555556,0.08589302099703139,0.5643177913060596
+gmm_ubm,Wang et al. 2023 baseline,39 dimensional MFCC sequences,64 component GMM-UBM score,random5,5,0.6084909931151561,0.03815514302412305,0.6030341179993555
+gsv_svm,Wang et al. 2023 baseline,64 component GMM supervectors from MFCC,GSV with RBF SVM,logo,8,0.6775173611111112,0.055692956947835624,0.6618271412931271
+gsv_svm,Wang et al. 2023 baseline,64 component GMM supervectors from MFCC,GSV with RBF SVM,random5,5,0.7387164010185796,0.023476719226482853,0.7361466257226683
+jin,Jin et al. 2019 style,"AAC codebook, scalefactor, and section statistics","VT plus SVM ranking, RBF SVM",logo,8,0.7743055555555556,0.0412512358854996,0.757141928361983
+jin_proposed,"Jin et al. 2019 proposed, adapted","AAC codebook, scalefactor, and section statistics","VT plus SVM ranking, tuned RBF SVM",logo,8,0.8042534722222223,0.04082894220396494,0.7967062280255977
+jin,Jin et al. 2019 style,"AAC codebook, scalefactor, and section statistics","VT plus SVM ranking, RBF SVM",random5,5,0.7738885221163821,0.027481743760868725,0.7461570508387272
+mfcc_cnn,Wang et al. 2023 baseline,39 dimensional MFCC maps,compact MFCC-CNN,logo,8,0.5963541666666667,0.20196747415135774,0.5658393530691268
+mfcc_cnn,Wang et al. 2023 baseline,39 dimensional MFCC maps,compact MFCC-CNN,random5,5,0.7482863340563991,0.07873941541397736,0.7286157040091144
+proposed,Ours,ISOBMFF metadata plus AAC PMF and TPM features,"Voting classifier, LR RF SVM",logo,8,0.982638888888889,0.008900971450856335,0.9824831735660866
+proposed,Ours,ISOBMFF metadata plus AAC PMF and TPM features,"Voting classifier, LR RF SVM",random5,5,0.9865462604923134,0.003560063274585247,0.9865287670939704
+wang_proposed,"Wang et al. 2023 proposed, paper based reimplementation",Raw waveform segments,"80 Sinc windows, two 60 kernel convolution layers, three layer 2048 node DNN, voting aggregation",logo,8,0.04123263888888889,0.04432793741653289,0.021023332100577344

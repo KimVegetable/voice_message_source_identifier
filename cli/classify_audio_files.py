@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 import joblib
@@ -22,6 +23,11 @@ PROB_CSV_FLOAT_FORMAT = f"%.{PROB_CSV_DECIMALS}f"
 SESSION_TIME = datetime.now().strftime("%Y%m%d_%H%M%S")
 DEBUG_ENABLED = True
 DEBUG_LOG_PATH = os.path.join(PROJECT_ROOT, "results", "diagnostics.log")
+MODEL_NAME_TO_FILE = {
+    "lr": "trained_lr.pkl",
+    "voting": "trained_voting.pkl",
+}
+DEFAULT_MODEL_NAME = "lr"
 
 LDA_TARGETS = [
     "cbMOTPintra",
@@ -40,6 +46,20 @@ def get_resource_path(*parts):
         base = PROJECT_ROOT
     return os.path.join(base, *parts)
 
+def resolve_model_filename(model_name: str | None = None) -> str:
+    explicit_file = os.environ.get("ASI_MODEL_FILE")
+    if model_name is None and explicit_file:
+        return explicit_file
+
+    selected = (model_name or os.environ.get("ASI_MODEL_NAME") or DEFAULT_MODEL_NAME).lower()
+    if selected in MODEL_NAME_TO_FILE:
+        return MODEL_NAME_TO_FILE[selected]
+    if selected.endswith(".pkl"):
+        return selected
+    raise ValueError(
+        f"Unknown model '{selected}'. Use one of {sorted(MODEL_NAME_TO_FILE)} or set ASI_MODEL_FILE."
+    )
+
 def _debug_log(message: str):
     if not DEBUG_ENABLED:
         return
@@ -51,7 +71,6 @@ def _debug_log(message: str):
         pass
 
 def apply_column_filtering(df: pd.DataFrame, name: str) -> pd.DataFrame:
-    # filtering_columns = joblib.load("models/filtering_columns.pkl")
     filtering_columns = joblib.load(get_resource_path("models", "filtering_columns.pkl"))
     if name not in filtering_columns:
         return df
@@ -74,7 +93,6 @@ def apply_lda_transform(feature_folder: str):
 
         file_col = df["file"]
 
-        # lda_bundle = joblib.load(lda_model_path)
         lda_bundle = joblib.load(lda_model_path)
         lda_model = lda_bundle["model"]
         lda_columns = lda_bundle["columns"]
@@ -107,7 +125,6 @@ def apply_lda_transform_in_memory(frames: dict) -> dict:
 
         file_col = df["file"]
 
-        # lda_bundle = joblib.load(lda_model_path)
         lda_bundle = joblib.load(lda_model_path)
         lda_model = lda_bundle["model"]
         lda_columns = lda_bundle["columns"]
@@ -199,7 +216,7 @@ def normalize_frame_types(frames: dict) -> dict:
         normalized[name] = pd.concat([file_col, feature_df], axis=1)
     return normalized
 
-def classify_audio_voting(audio_path: str, verbose: bool = False):
+def classify_audio_voting(audio_path: str, verbose: bool = False, model_name: str | None = None):
     _debug_log(f"classify start path={audio_path} frozen={getattr(sys, 'frozen', False)} exe={sys.executable} cwd={os.getcwd()}")
     extracted_csv = run_extract(audio_path)
     feature_folder = run_preprocessing(extracted_csv)
@@ -238,7 +255,6 @@ def classify_audio_voting(audio_path: str, verbose: bool = False):
     file_list = merged_data["file"].values
     merged_data = merged_data.drop(columns=["file"], errors="ignore")
 
-    # used_columns = joblib.load("models/used_columns.pkl")
     used_columns = joblib.load(get_resource_path("models", "used_columns.pkl"))
     missing_cols = [c for c in used_columns if c not in merged_data.columns]
     _debug_log(f"feature columns total={len(used_columns)} missing={len(missing_cols)}")
@@ -247,13 +263,11 @@ def classify_audio_voting(audio_path: str, verbose: bool = False):
     merged_data = merged_data[used_columns]
     X_cpu = merged_data.values
 
-    # model = joblib.load("models/trained_voting.pkl")
-    # scaler = joblib.load("models/scaler.pkl")
-    # labels = joblib.load("models/labels.pkl")
-    model = joblib.load(get_resource_path("models", "trained_voting.pkl"))
+    model_filename = resolve_model_filename(model_name)
+    model = joblib.load(get_resource_path("models", model_filename))
     scaler = joblib.load(get_resource_path("models", "scaler.pkl"))
     labels = joblib.load(get_resource_path("models", "labels.pkl"))
-    _debug_log(f"models loaded labels={len(labels)} used_cols={len(used_columns)}")
+    _debug_log(f"model loaded file={model_filename} labels={len(labels)} used_cols={len(used_columns)}")
 
     X_cpu = np.nan_to_num(X_cpu, nan=0.0)
     X_scaled = scaler.transform(X_cpu)
@@ -318,6 +332,13 @@ def classify_audio_voting(audio_path: str, verbose: bool = False):
 
 
 if __name__ == "__main__":
-    path = sys.argv[1] if len(sys.argv) > 1 else "test"
-    is_dir = os.path.isdir(path)
-    classify_audio_voting(path)
+    parser = argparse.ArgumentParser(description="Classify voice message sources from audio files.")
+    parser.add_argument("path", nargs="?", default="test", help="Audio file or folder path.")
+    parser.add_argument(
+        "--model",
+        choices=sorted(MODEL_NAME_TO_FILE),
+        default=None,
+        help="Classifier to use. Defaults to LR, or ASI_MODEL_NAME if set.",
+    )
+    args = parser.parse_args()
+    classify_audio_voting(args.path, model_name=args.model)
